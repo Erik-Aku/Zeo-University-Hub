@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { searchColleges, saveCollege, deleteCollege } from './API';
+import { searchColleges, saveCollege } from './API';
 import { saveCollegeIds, getSavedCollegeIds } from './localStorage';
 
 const SearchColleges = () => {
@@ -12,11 +12,18 @@ const SearchColleges = () => {
         return () => saveCollegeIds(savedCollegeIds);
     }, [savedCollegeIds]);
 
+    // Function to handle form submission
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        if (!inputValue) return;
+        searchColleges(inputValue);
+    };
+
     // Handle input change
     const handleInputChange = (event) => {
         const { value } = event.target;
         setInputValue(value);
-        fetchColleges(value);
+        searchColleges(value);
 
         if (!value) {
             setSuggestions([]);
@@ -34,48 +41,35 @@ const SearchColleges = () => {
     };
 
     // Function to handle saving a college
-    const handleSaveCollege = async (collegeId) => {
-        const collegeToSave = suggestions.find((college) => college.id === collegeId);
-
-        const token = '447a932fd1msh0d9dd0f0212fec5p10a804jsna36243841f48';
-
-        if (!token) {
-            return false;
-        }
-
-        try {
-            await saveCollege(collegeToSave, token);
-            setSavedCollegeIds([...savedCollegeIds, collegeToSave.id]);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    // Function to handle deleting a saved college
-    const handleDeleteCollege = async (collegeId) => {
-        const token = '447a932fd1msh0d9dd0f0212fec5p10a804jsna36243841f48';
+    const handleSaveCollege = async (collegeName) => {
+        // The saveCollege function would need to be adapted to handle the college data structure
+        const token = 'your-auth-token-here'; // Replace this with actual token retrieval logic
 
         if (!token) {
             return false;
         }
 
         try {
-            await deleteCollege(collegeId, token);
-            const updatedSavedCollegeIds = savedCollegeIds.filter(id => id !== collegeId);
-            setSavedCollegeIds(updatedSavedCollegeIds);
+            await saveCollege({ name: collegeName }, token);
+            setSavedCollegeIds([...savedCollegeIds, collegeName]);
         } catch (err) {
             console.error(err);
         }
     };
 
     return (
-        <div>
-            <input
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-                placeholder="Search for colleges"
-            />
+        <>
+            <div>
+                <form onSubmit={handleFormSubmit}>
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        placeholder="Search for colleges"
+                    />
+                    <button type="submit">Search</button>
+                </form>
+            </div>
             <div>
                 {searchHistory.length > 0 && (
                     <div>
@@ -91,14 +85,17 @@ const SearchColleges = () => {
                     <div>
                         <h4>Suggestions</h4>
                         <ul>
-                            {suggestions.map((suggestion, index) => (
-                                <li key={index} onClick={() => handleSelectSuggestion(suggestion)}>{suggestion}</li>
+                            {suggestions.map((collegeName, index) => (
+                                <li key={index} onClick={() => handleSelectSuggestion(collegeName)}>
+                                    {collegeName}
+                                    <button onClick={() => handleSaveCollege(collegeName)}>Save</button>
+                                </li>
                             ))}
                         </ul>
                     </div>
                 )}
             </div>
-        </div>
+        </>
     );
 };
 
