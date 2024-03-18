@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import SearchColleges from "./pages/searchColleges.jsx";
+import SearchColleges from "./pages/SearchColleges.jsx";
 import SavedColleges from "./pages/SavedColleges.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
