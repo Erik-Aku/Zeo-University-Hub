@@ -1,108 +1,141 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Container, Form, Button, Grid, Card, Image } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 import Auth from '../utils/auth';
-import { searchColleges, saveCollege } from './API';
-import { saveCollegeIds, getSavedCollegeIds } from './localStorage';
+import { saveCollege, searchColleges } from '../utils/API';
+import { saveCollegeIds, getSavedCollegeIds } from '../utils/localStorage';
 
 const SearchColleges = () => {
-	const [inputValue, setInputValue] = useState('');
-	const [suggestions, setSuggestions] = useState([]);
-	const [searchHistory, setSearchHistory] = useState([]);
-	const [savedCollegeIds, setSavedCollegeIds] = useState(
-		getSavedCollegeIds()
-	);
+    const [searchedColleges, setSearchedColleges] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
+    const [savedCollegeIds, setSavedCollegeIds] = useState(
+        getSavedCollegeIds()
+    );
 
-	useEffect(() => {
-		return () => saveCollegeIds(savedCollegeIds);
-	}, [savedCollegeIds]);
+    useEffect(() => {
+        return () => saveCollegeIds(savedCollegeIds);
+    });
 
-	// Function to handle form submission
-	const handleFormSubmit = async (event) => {
-		event.preventDefault();
-		if (!inputValue) return;
-		searchColleges(inputValue);
-	};
+    // create method to search for Colleges and set state on form submit
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
 
-	// Handle input change
-	const handleInputChange = (event) => {
-		const { value } = event.target;
-		setInputValue(value);
-		searchColleges(value);
+        if (!searchInput) {
+            return false;
+        }
 
-		if (!value) {
-			setSuggestions([]);
-		}
-	};
+        try {
+            const collegeResults = await searchColleges(searchInput);
 
-	// Handle selection from suggestions, adding to search history
-	const handleSelectSuggestion = (suggestion) => {
-		setInputValue(suggestion);
-		setSuggestions([]);
-		setSearchHistory((prevHistory) => {
-			const updatedHistory = [
-				suggestion,
-				...prevHistory.filter((item) => item !== suggestion)
-			];
-			return updatedHistory.slice(0, 5); // Keep only the last 5 items
-		});
-	};
+            console.log(collegeResults);
+            const collegeData = collegeResults.map((college) => ({
+                collegeId: college.id,
+                name: college.name
+            }));
 
-	// Function to handle saving a college
-	const handleSaveCollege = async (collegeName) => {
-		// The saveCollege function would need to be adapted to handle the college data structure
-		const token = 'your-auth-token-here'; // Replace this with actual token retrieval logic
+            setSearchedColleges(collegeData);
+            setSearchInput('');
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
-		if (!token) {
-			return false;
-		}
+    // create function to handle saving a college to our database
+    const handleSaveCollege = async (collegeId) => {
+        // find the college in `searchedColleges` state by the matching id
+        const collegeToSave = searchedColleges.find(
+            (college) => college.collegeId === collegeId
+        );
+        const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-		try {
-			await saveCollege({ name: collegeName }, token);
-			setSavedCollegeIds([...savedCollegeIds, collegeName]);
-		} catch (err) {
-			console.error(err);
-		}
-	};
+        if (!token) {
+            return false;
+        }
+
+        try {
+            const response = await saveCollege(collegeToSave, token);
+
+            if (!response.ok) {
+                throw new Error('something went wrong!');
+            }
+
+            // if college successfully saves to user's account, save college id to state
+            setSavedCollegeIds([...savedCollegeIds, collegeToSave.collegeId]);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     return (
         <>
-            <div>
-                <form onSubmit={handleFormSubmit}>
-                    <input
-                        type="text"
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        placeholder="Search for colleges"
-                    />
-                    <button type="submit">Search</button>
-                </form>
+            <div className="ui inverted segment text-light bg-dark p-5">
+                <Container>
+                    <h1>Search for Colleges!</h1>
+                    <Form onSubmit={handleFormSubmit}>
+                        <Grid>
+                            <Grid.Column width={10}>
+                                <Form.Input
+                                    name='searchInput'
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
+                                    type='text'
+                                    placeholder='Search for a college'
+                                    fluid
+                                />
+                            </Grid.Column>
+                            <Grid.Column width={6}>
+                                <Button type='submit' color='green'>
+                                    Submit Search
+                                </Button>
+                            </Grid.Column>
+                        </Grid>
+                    </Form>
+                </Container>
             </div>
-            <div>
-                {searchHistory.length > 0 && (
-                    <div>
-                        <h4>Search History</h4>
-                        <ul>
-                            {searchHistory.map((item, index) => (
-                                <li key={index} onClick={() => handleSelectSuggestion(item)}>{item}</li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-                {suggestions.length > 0 && (
-                    <div>
-                        <h4>Suggestions</h4>
-                        <ul>
-                            {suggestions.map((collegeName, index) => (
-                                <li key={index} onClick={() => handleSelectSuggestion(collegeName)}>
-                                    {collegeName}
-                                    <button onClick={() => handleSaveCollege(collegeName)}>Save</button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
+
+            <Container>
+                <h2 className='pt-5'>
+                    {searchedColleges.length
+                        ? `Viewing ${searchedColleges.length} results:`
+                        : 'Search for a college to begin'}
+                </h2>
+                <Grid>
+                    {searchedColleges.map((college) => {
+                        return (
+                            <Grid.Column key={college.collegeId} width={4}>
+                                <Card>
+                                    {college.image && (
+                                        <Image src={college.image} wrapped ui={false} alt={`The cover for ${college.title}`} />
+                                    )}
+                                    <Card.Content>
+                                        <Card.Header>{college.name}</Card.Header>
+                                        <Card.Meta>
+                                            <span className='date'>Authors: {college.authors}</span>
+                                        </Card.Meta>
+                                        <Card.Description>{college.description}</Card.Description>
+                                    </Card.Content>
+                                    {Auth.loggedIn() && (
+                                        <Card.Content extra>
+                                            <Button
+                                                fluid
+                                                color='blue'
+                                                disabled={savedCollegeIds?.some((savedCollegeId) => savedCollegeId === college.collegeId)}
+                                                onClick={() => handleSaveCollege(college.collegeId)}>
+                                                {savedCollegeIds?.some((savedCollegeId) => savedCollegeId === college.collegeId)
+                                                    ? 'This college has already been saved!'
+                                                    : 'Save this college!'}
+                                            </Button>
+                                        </Card.Content>
+                                    )}
+                                </Card>
+                            </Grid.Column>
+                        );
+                    })}
+                </Grid>
+            </Container>
         </>
     );
+
 };
 
 export default SearchColleges;

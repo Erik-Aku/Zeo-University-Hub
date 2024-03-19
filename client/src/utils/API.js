@@ -1,80 +1,78 @@
-const axios = require('axios');
+import axios from 'axios';
 
-// Route to get logged in user's info (needs the token)
 export const getMe = (token) => {
-	return fetch('/api/users/me', {
-		headers: {
-			'Content-Type': 'application/json',
-			authorization: `Bearer ${token}`
-		}
-	});
+    return fetch('/api/users/me', {
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`,
+        },
+    });
 };
 
-// Function to create a new user
 export const createUser = (userData) => {
-	return fetch('/api/users', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(userData)
-	});
+    return fetch('/api/users', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+    });
 };
 
-// Function to log in a user
 export const loginUser = (userData) => {
-	return fetch('/api/users/login', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(userData)
-	});
+    return fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+    });
 };
 
-export const saveCollege = async (collegeData, token) => {
-	return axios({
-		method: 'PUT',
-		url: '/api/users/colleges',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`
-		},
-		data: JSON.stringify(collegeData)
-	});
+// save book data for a logged in user
+export const saveCollege = (collegeData, token) => {
+    return fetch('/api/users', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(collegeData),
+    });
 };
 
-// Function to delete a saved college from the user's account
-export const deleteCollege = async (collegeId, token) => {
-	return axios({
-		method: 'DELETE',
-		url: `/api/users/colleges/${collegeId}`,
-		headers: {
-			Authorization: `Bearer ${token}`
-		}
-	});
+// remove saved book data for a logged in user
+export const deleteCollege = (collegeId, token) => {
+    return fetch(`/api/users/books/${collegeId}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: `Bearer ${token}`,
+        },
+    });
 };
 
-export const searchColleges = async (query) => {
-	if (!query) return [];
+export const searchColleges = async (searchInput) => {
+    console.log(searchInput);
+    try {
+        const url = `https://universities-and-colleges.p.rapidapi.com/universities?page=20&includeUniversityDetails=true&countryCode=US&limit=10&search=${searchInput}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': '259c12961cmshc2c28f256baa3b6p139941jsn5f85db5baba2',
+                'X-RapidAPI-Host': 'universities-and-colleges.p.rapidapi.com'
+            }
+        };
 
-	try {
-		const response = await axios.get(
-			`http://universities-and-colleges.p.rapidapi.com/`,
-			{
-				params: { name: query },
-				headers: {
-					'X-RapidAPI-Host':
-						'universities-and-colleges.p.rapidapi.com',
-					'X-RapidAPI-Key':
-						'447a932fd1msh0d9dd0f0212fec5p10a804jsna36243841f48'
-				}
-			}
-		);
+        const response = await fetch(url, options);
+        console.log(response);
+        if (!response.ok) {
+            throw new Error('something went wrong!');
+        }
 
-		return response.data.map((college) => college.name);
-	} catch (error) {
-		console.error('Error fetching college data:', error);
-		return [];
-	}
+        const result = await response.json();
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
 };
