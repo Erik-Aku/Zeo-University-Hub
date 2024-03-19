@@ -72,7 +72,6 @@ export const searchColleges = async (query) => {
         console.log(data);
         // Transform the data to match the expected format for your app
         return data.results.map((college) => ({
-            id: college['school.id'],
             name: college['school.name'],
             city: college['school.city'],
             state: college['school.state'],
