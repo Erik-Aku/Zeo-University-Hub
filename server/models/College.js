@@ -12,16 +12,14 @@ const collegeSchema = new Schema({
     type: String,
     required: true,
   },
-  type: {
+  tuition: {
     type: String,
   },
 
-  website: {
-    type: String,
+  size: {
+    type: Number,
   },
-  mascot: {
-    type: String,
-  },
+
   city: {
     type: String,
     required: true,
@@ -30,10 +28,13 @@ const collegeSchema = new Schema({
     type: String,
     required: true,
   },
-  country: {
+  degrees: {
     type: String,
     required: true,
   },
+  admissions:{
+    type:String,
+  }
 });
 
 module.exports = collegeSchema;
