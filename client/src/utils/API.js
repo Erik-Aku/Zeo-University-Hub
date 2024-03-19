@@ -51,28 +51,64 @@ export const deleteCollege = (collegeId, token) => {
     });
 };
 
-export const searchColleges = async (searchInput) => {
-    console.log(searchInput);
-    try {
-        const url = `https://universities-and-colleges.p.rapidapi.com/universities?page=20&includeUniversityDetails=true&countryCode=US&limit=10&search=${searchInput}`;
-        const options = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': '259c12961cmshc2c28f256baa3b6p139941jsn5f85db5baba2',
-                'X-RapidAPI-Host': 'universities-and-colleges.p.rapidapi.com'
-            }
-        };
+export const searchColleges = async (query) => {
+    console.log(query);
+    if (!query) return [];
 
-        const response = await fetch(url, options);
+    const apiKey = 'TsbiBlKfrodbx9jMgXWNJe2jbDBI1iV1KpUhoHXD';
+    const fields = 'school.name,school.city,school.state,latest.student.size';
+    const endpoint = `https://api.data.gov/ed/collegescorecard/v1/schools?api_key=${apiKey}&school.name=${encodeURIComponent(query)}&fields=${fields}&per_page=50`; // Adjust 'per_page' as needed
+    console.log(endpoint);
+
+    try {
+        const response = await fetch(endpoint);
         console.log(response);
+
         if (!response.ok) {
-            throw new Error('something went wrong!');
+            throw new Error('Network response was not ok');
         }
 
-        const result = await response.json();
-        console.log(result);
-        return result;
+        const data = await response.json();
+        console.log(data);
+        // Transform the data to match the expected format for your app
+        return data.results.map((college) => ({
+            name: college['school.name'],
+            city: college['school.city'],
+            state: college['school.state'],
+            size: college['latest.student.size'],
+            tuition: college['latest.cost.tuition'],
+            admissions: college['latest.admissions.admission_rate.overall'],
+            degrees: college['school.degrees_awareded.predominant']
+        }));
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching college data:', error);
+        return [];
     }
 };
+
+
+// export const searchColleges = async (searchInput) => {
+//     console.log(searchInput);
+//     try {
+//         const url = `https://universities-and-colleges.p.rapidapi.com/universities?page=20&includeUniversityDetails=true&countryCode=US&limit=10&search=${searchInput}`;
+//         const options = {
+//             method: 'GET',
+//             headers: {
+//                 'X-RapidAPI-Key': '259c12961cmshc2c28f256baa3b6p139941jsn5f85db5baba2',
+//                 'X-RapidAPI-Host': 'universities-and-colleges.p.rapidapi.com'
+//             }
+//         };
+
+//         const response = await fetch(url, options);
+//         console.log(response);
+//         if (!response.ok) {
+//             throw new Error('something went wrong!');
+//         }
+
+//         const result = await response.json();
+//         console.log(result);
+//         return result;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
