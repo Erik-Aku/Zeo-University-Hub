@@ -1,42 +1,64 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
+  font-family: 'Rubik', sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Rubik Mono One', sans-serif;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.small {
+  font-weight: 300;
+  font-style: italic;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Roopa */
+header {
+  margin: 10px;
+  background-color: dodgerblue;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+nav {
+  display: flex;
 }
 
-.card {
-  padding: 2em;
+nav a {
+  text-decoration: none;
+  padding: 20px;
 }
+/*Transforming the image*/
+#profilepic {
+  border-radius: 50%;
+}
+#AboutMe {
+  display: flex;
+  flex-wrap: wrap;
+}
+/* Sets the sidebar width to 30% of body width and makes flexable*/
+aside {
+  display: flex;
+  justify-content: center;
+  flex: 30%;
+  align-items: center;
+  color: rgb(59, 59, 185);
+}
+/* Sets the AboutMe section  width to 70% of body width */
 
-.read-the-docs {
-  color: #888;
+#AboutMe p {
+  flex: 70%;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-left: 50px;
+  border-left: solid var(--color);
+}
+#Work {
+  display: flex;
+  flex-wrap: wrap;
 }
