@@ -23,7 +23,7 @@ export const ADD_USER = gql`
         savedColleges {
           name
           collegeId
-          description
+          city
         }
       }
     }
