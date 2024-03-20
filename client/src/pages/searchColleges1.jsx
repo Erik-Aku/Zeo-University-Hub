@@ -30,7 +30,10 @@ const SearchColleges = () => {
             console.log(collegeResults);
             const collegeData = collegeResults.map((college) => ({
                 collegeId: college.id,
-                name: college.name
+                name: college.name,
+                city: college.city,
+                state: college.state,
+                size: college.size
             }));
 
             setSearchedColleges(collegeData);
@@ -104,15 +107,17 @@ const SearchColleges = () => {
                         return (
                             <Grid.Column key={college.collegeId} width={4}>
                                 <Card>
-                                    {college.image && (
+                                    {/* {college.image && (
                                         <Image src={college.image} wrapped ui={false} alt={`The cover for ${college.title}`} />
-                                    )}
+                                    )} */}
                                     <Card.Content>
                                         <Card.Header>{college.name}</Card.Header>
                                         <Card.Meta>
-                                            <span className='date'>Authors: {college.authors}</span>
+                                            <span className='date'>{college.city}, {college.state}</span>
+                                            <span className='date'>{college.size} students</span>
+                                            <span className='date'>{college.collegeId}</span>
                                         </Card.Meta>
-                                        <Card.Description>{college.description}</Card.Description>
+                                        {/* <Card.Description>{college.description}</Card.Description> */}
                                     </Card.Content>
                                     {Auth.loggedIn() && (
                                         <Card.Content extra>

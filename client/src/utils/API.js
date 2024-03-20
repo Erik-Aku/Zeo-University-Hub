@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { generateHashId } from '../utils/helpers';
 
 export const getMe = (token) => {
     return fetch('/api/users/me', {
@@ -57,7 +57,7 @@ export const searchColleges = async (query) => {
 
     const apiKey = 'TsbiBlKfrodbx9jMgXWNJe2jbDBI1iV1KpUhoHXD';
     const fields = 'school.name,school.city,school.state,latest.student.size';
-    const endpoint = `https://api.data.gov/ed/collegescorecard/v1/schools?api_key=${apiKey}&school.name=${encodeURIComponent(query)}&fields=${fields}&per_page=50`; // Adjust 'per_page' as needed
+    const endpoint = `https://api.data.gov/ed/collegescorecard/v1/schools?api_key=${apiKey}&school.name=${encodeURIComponent(query)}&fields=${fields}&per_page=50`;
     console.log(endpoint);
 
     try {
@@ -70,15 +70,13 @@ export const searchColleges = async (query) => {
 
         const data = await response.json();
         console.log(data);
-        // Transform the data to match the expected format for your app
+        
         return data.results.map((college) => ({
+            id: generateHashId(college['school.name'], college['school.city'], college['school.state']),
             name: college['school.name'],
             city: college['school.city'],
             state: college['school.state'],
-            size: college['latest.student.size'],
-            tuition: college['latest.cost.tuition'],
-            admissions: college['latest.admissions.admission_rate.overall'],
-            degrees: college['school.degrees_awareded.predominant']
+            size: college['latest.student.size']
         }));
     } catch (error) {
         console.error('Error fetching college data:', error);
