@@ -5,7 +5,7 @@ import Auth from "../utils/auth";
 const AppNavbar = () => {
   return (
     <>
-      <header>
+      <header className="header-zeo">
         <img
           id="profilepic"
           src="./Assets/images/profile pic.png"
@@ -15,7 +15,7 @@ const AppNavbar = () => {
         />
 
         <h1>Zeo University Hub</h1>
-        <nav>
+        <nav className='nav-bar'>
           <Link to="/">
             <h3>
               <b>Home</b>
