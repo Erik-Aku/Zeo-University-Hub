@@ -17,7 +17,7 @@ h6 {
 }
 
 /* Roopa */
-header {
+.header-zeo {
   margin: 10px;
   background-color: dodgerblue;
   display: flex;
@@ -26,11 +26,11 @@ header {
   align-items: center;
   padding: 10px;
 }
-nav {
+.nav-bar {
   display: flex;
 }
 
-nav a {
+.nav-bar a {
   text-decoration: none;
   padding: 20px;
 }
@@ -42,14 +42,7 @@ nav a {
   display: flex;
   flex-wrap: wrap;
 }
-/* Sets the sidebar width to 30% of body width and makes flexable*/
-aside {
-  display: flex;
-  justify-content: center;
-  flex: 30%;
-  align-items: center;
-  color: rgb(59, 59, 185);
-}
+
 /* Sets the AboutMe section  width to 70% of body width */
 
 #AboutMe p {
