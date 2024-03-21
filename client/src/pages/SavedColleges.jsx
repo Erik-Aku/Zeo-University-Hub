@@ -3,7 +3,7 @@ import { Container, Card, Button, Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import { getMe, deleteCollege } from '../utils/API';
 import Auth from '../utils/auth';
-import { removeBookId } from '../utils/localStorage';
+import { removeCollegeId } from '../utils/localStorage';
 
 const SavedColleges = () => {
 	const [userData, setUserData] = useState({});
@@ -54,7 +54,7 @@ const SavedColleges = () => {
 			const updatedUser = await response.json();
 			setUserData(updatedUser);
 			// upon success, remove college's id from localStorage
-			removeBookId(collegeId);
+			removeCollegeId(collegeId);
 		} catch (err) {
 			console.error(err);
 		}

@@ -105,7 +105,7 @@ const SearchColleges = () => {
                 <Grid>
                     {searchedColleges.map((college) => {
                         return (
-                            <Grid.Column key={college.collegeId} width={4}>
+                            <Grid.Column key={college.collegeId} width={8}>
                                 <Card>
                                     {/* {college.image && (
                                         <Image src={college.image} wrapped ui={false} alt={`The cover for ${college.title}`} />
@@ -115,7 +115,7 @@ const SearchColleges = () => {
                                         <Card.Meta>
                                             <span className='date'>{college.city}, {college.state}</span>
                                             <span className='date'>{college.size} students</span>
-                                            <span className='date'>{college.collegeId}</span>
+                                            {/* <span className='date'>{college.collegeId}</span> */}
                                         </Card.Meta>
                                         {/* <Card.Description>{college.description}</Card.Description> */}
                                     </Card.Content>
