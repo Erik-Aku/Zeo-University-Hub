@@ -1,55 +1,55 @@
 import { generateHashId } from '../utils/helpers';
 
-// export const getMe = (token) => {
-//     return fetch('/api/users/me', {
-//         headers: {
-//             'Content-Type': 'application/json',
-//             authorization: `Bearer ${token}`,
-//         },
-//     });
-// };
+export const getMe = (token) => {
+    return fetch('/api/users/me', {
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`,
+        },
+    });
+};
 
-// export const createUser = (userData) => {
-//     return fetch('/api/users', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(userData),
-//     });
-// };
+export const createUser = (userData) => {
+    return fetch('/api/users', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+    });
+};
 
-// export const loginUser = (userData) => {
-//     return fetch('/api/users/login', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(userData),
-//     });
-// };
+export const loginUser = (userData) => {
+    return fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+    });
+};
 
-// // save book data for a logged in user
-// export const saveCollege = (collegeData, token) => {
-//     return fetch('/api/users', {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify(collegeData),
-//     });
-// };
+// save book data for a logged in user
+export const saveCollege = (collegeData, token) => {
+    return fetch('/api/users', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(collegeData),
+    });
+};
 
-// // remove saved book data for a logged in user
-// export const deleteCollege = (collegeId, token) => {
-//     return fetch(`/api/users/books/${collegeId}`, {
-//         method: 'DELETE',
-//         headers: {
-//             authorization: `Bearer ${token}`,
-//         },
-//     });
-// };
+// remove saved book data for a logged in user
+export const deleteCollege = (collegeId, token) => {
+    return fetch(`/api/users/books/${collegeId}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: `Bearer ${token}`,
+        },
+    });
+};
 
 export const searchColleges = async (query) => {
     console.log(query);
