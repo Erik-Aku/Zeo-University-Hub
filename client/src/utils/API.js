@@ -1,90 +1,90 @@
 import { generateHashId } from '../utils/helpers';
 
-export const getMe = (client, token) => {
-	const GET_ME = gql`
-		query GetMe {
-			me {
-				id
-				username
-				email
-				savedColleges {
-					id
-					name
-					city
-					state
-					size
-				}
-			}
-		}
-	`;
+// export const getMe = (client, token) => {
+// 	const GET_ME = gql`
+// 		query GetMe {
+// 			me {
+// 				id
+// 				username
+// 				email
+// 				savedColleges {
+// 					id
+// 					name
+// 					city
+// 					state
+// 					size
+// 				}
+// 			}
+// 		}
+// 	`;
 
-	return client.query({
-		query: GET_ME,
-		context: { headers: { authorization: `Bearer ${token}` } }
-	});
-};
+// 	return client.query({
+// 		query: GET_ME,
+// 		context: { headers: { authorization: `Bearer ${token}` } }
+// 	});
+// };
 
-export const createUser = (client, userData) => {
-	const LOGIN_USER = gql`
-		mutation LoginUser($email: String!, $password: String!) {
-			loginUser(email: $email, password: $password) {
-				token
-			}
-		}
-	`;
+// export const createUser = (client, userData) => {
+// 	const LOGIN_USER = gql`
+// 		mutation LoginUser($email: String!, $password: String!) {
+// 			loginUser(email: $email, password: $password) {
+// 				token
+// 			}
+// 		}
+// 	`;
 
-	return client.mutate({ mutation: LOGIN_USER, variables: userData });
-};
+// 	return client.mutate({ mutation: LOGIN_USER, variables: userData });
+// };
 
-export const loginUser = (client, userData) => {
-	const LOGIN_USER = gql`
-		mutation LoginUser($email: String!, $password: String!) {
-			loginUser(email: $email, password: $password) {
-				token
-			}
-		}
-	`;
+// export const loginUser = (client, userData) => {
+// 	const LOGIN_USER = gql`
+// 		mutation LoginUser($email: String!, $password: String!) {
+// 			loginUser(email: $email, password: $password) {
+// 				token
+// 			}
+// 		}
+// 	`;
 
-	return client.mutate({ mutation: LOGIN_USER, variables: userData });
-};
+// 	return client.mutate({ mutation: LOGIN_USER, variables: userData });
+// };
 
-// save book data for a logged in user
-export const saveCollege = (client, collegeData, token) => {
-	const SAVE_COLLEGE = gql`
-		mutation SaveCollege($collegeData: CollegeInput!) {
-			saveCollege(collegeData: $collegeData) {
-				id
-				name
-				city
-				state
-				size
-			}
-		}
-	`;
+// // save book data for a logged in user
+// export const saveCollege = (client, collegeData, token) => {
+// 	const SAVE_COLLEGE = gql`
+// 		mutation SaveCollege($collegeData: CollegeInput!) {
+// 			saveCollege(collegeData: $collegeData) {
+// 				id
+// 				name
+// 				city
+// 				state
+// 				size
+// 			}
+// 		}
+// 	`;
 
-	return client.mutate({
-		mutation: SAVE_COLLEGE,
-		variables: { collegeData },
-		context: { headers: { authorization: `Bearer ${token}` } }
-	});
-};
+// 	return client.mutate({
+// 		mutation: SAVE_COLLEGE,
+// 		variables: { collegeData },
+// 		context: { headers: { authorization: `Bearer ${token}` } }
+// 	});
+// };
 
-// remove saved book data for a logged in user
-export const deleteCollege = (client, collegeId, token) => {
-	const DELETE_COLLEGE = gql`
-		mutation DeleteCollege($collegeId: ID!) {
-			deleteCollege(collegeId: $collegeId) {
-				id
-			}
-		}
-	`;
+// // remove saved book data for a logged in user
+// export const deleteCollege = (client, collegeId, token) => {
+// 	const DELETE_COLLEGE = gql`
+// 		mutation DeleteCollege($collegeId: ID!) {
+// 			deleteCollege(collegeId: $collegeId) {
+// 				id
+// 			}
+// 		}
+// 	`;
 
-	return client.mutate({
-		mutation: DELETE_COLLEGE,
-		variables: { collegeId },
-		context: { headers: { authorization: `Bearer ${token}` } }
-	});
-};
+// 	return client.mutate({
+// 		mutation: DELETE_COLLEGE,
+// 		variables: { collegeId },
+// 		context: { headers: { authorization: `Bearer ${token}` } }
+// 	});
+// };
 
 export const searchColleges = async (query) => {
 	console.log(query);
