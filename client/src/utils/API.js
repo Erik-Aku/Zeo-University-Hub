@@ -1,54 +1,78 @@
 import { generateHashId } from '../utils/helpers';
 
-export const getMe = (token) => {
-    return fetch('/api/users/me', {
-        headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`,
-        },
-    });
+export const getMe = (client, token) => {
+    const GET_ME = gql`
+        query GetMe {
+            me {
+                id
+                username
+                email
+                savedColleges {
+                    id
+                    name
+                    city
+                    state
+                    size
+                }
+            }
+        }
+    `;
+
+    return client.query({ query: GET_ME, context: { headers: { authorization: `Bearer ${token}` } } });
 };
 
-export const createUser = (userData) => {
-    return fetch('/api/users', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-    });
+export const createUser = (client, userData) => {
+    const LOGIN_USER = gql`
+        mutation LoginUser($email: String!, $password: String!) {
+            loginUser(email: $email, password: $password) {
+                token
+            }
+        }
+    `;
+
+    return client.mutate({ mutation: LOGIN_USER, variables: userData });
 };
 
-export const loginUser = (userData) => {
-    return fetch('/api/users/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-    });
+export const loginUser = (client, userData) => {
+    const LOGIN_USER = gql`
+        mutation LoginUser($email: String!, $password: String!) {
+            loginUser(email: $email, password: $password) {
+                token
+            }
+        }
+    `;
+
+    return client.mutate({ mutation: LOGIN_USER, variables: userData });
 };
 
 // save book data for a logged in user
-export const saveCollege = (collegeData, token) => {
-    return fetch('/api/users', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(collegeData),
-    });
+export const saveCollege = (client, collegeData, token) => {
+    const SAVE_COLLEGE = gql`
+        mutation SaveCollege($collegeData: CollegeInput!) {
+            saveCollege(collegeData: $collegeData) {
+                id
+                name
+                city
+                state
+                size
+            }
+        }
+    `;
+
+    return client.mutate({ mutation: SAVE_COLLEGE, variables: { collegeData }, context: { headers: { authorization: `Bearer ${token}` } } });
 };
 
 // remove saved book data for a logged in user
-export const deleteCollege = (collegeId, token) => {
-    return fetch(`/api/users/books/${collegeId}`, {
-        method: 'DELETE',
-        headers: {
-            authorization: `Bearer ${token}`,
-        },
-    });
+export const deleteCollege = (client, collegeId, token) => {
+    const DELETE_COLLEGE = gql`
+        mutation DeleteCollege($collegeId: ID!) {
+            deleteCollege(collegeId: $collegeId) {
+                id
+            }
+        }
+    `;
+
+    return client.mutate({ mutation: DELETE_COLLEGE, variables: { collegeId }, context: { headers: { authorization: `Bearer ${token}` } } });
 };
 
 export const searchColleges = async (query) => {
@@ -83,7 +107,6 @@ export const searchColleges = async (query) => {
         return [];
     }
 };
-
 
 // export const searchColleges = async (searchInput) => {
 //     console.log(searchInput);
