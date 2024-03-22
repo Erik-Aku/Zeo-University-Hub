@@ -8,8 +8,8 @@ import { GET_ME } from '../utils/queries/';
 import { REMOVE_College } from '../utils/mutations';
 
 const SavedColleges = () => {
-	const { loading, data } = useQuery(GET_ME);
-	const [removeBook, { error }] = useMutation(REMOVE_College);
+	const [getMe, { loading, data }] = useQuery(GET_ME);
+	const [removeCollege, { error }] = useMutation(REMOVE_College);
 	const userData = data?.me || {};
 
 	// use this to determine if `useEffect()` hook needs to run again
@@ -24,7 +24,7 @@ const SavedColleges = () => {
 					return false;
 				}
 
-				const response = await GET_ME(token);
+				const response = await getMe(token);
 
 				if (!response.ok) {
 					throw new Error('something went wrong!');
@@ -49,7 +49,7 @@ const SavedColleges = () => {
 		}
 
 		try {
-			const response = await REMOVE_College({
+			const response = await removeCollege({
 				variables: { collegeId, token }
 			});
 
