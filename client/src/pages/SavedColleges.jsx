@@ -3,6 +3,7 @@ import { Container, Card, Button, Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import Auth from '../utils/auth';
 import { removeCollegeId } from '../utils/localStorage';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_ME } from '../utils/queries/';
 import { REMOVE_College } from '../utils/mutations';
 
@@ -48,10 +49,12 @@ const SavedColleges = () => {
 		}
 
 		try {
-			const response = await REMOVE_College(collegeId, token);
+			const response = await REMOVE_College({
+				variables: { collegeId, token }
+			});
 
 			if (!response.ok) {
-				throw new Error('something went wrong!');
+				throw new Error('Something went wrong!');
 			}
 
 			const updatedUser = await response.json();

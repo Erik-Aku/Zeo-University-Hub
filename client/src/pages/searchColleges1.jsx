@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Container, Form, Button, Grid, Card, Image } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import Auth from '../utils/auth';
-import { saveCollege, searchColleges } from '../utils/API';
 import { saveCollegeIds, getSavedCollegeIds } from '../utils/localStorage';
+import { searchColleges } from '../utils/API';
+import { useMutation } from '@apollo/client';
 import { SAVE_College } from '../utils/mutations';
 
 const SearchColleges = () => {
@@ -13,6 +14,7 @@ const SearchColleges = () => {
         getSavedCollegeIds()
     );
 
+    const [saveCollege, { error }] = useMutation(SAVE_College);
     useEffect(() => {
         return () => saveCollegeIds(savedCollegeIds);
     });
@@ -57,10 +59,12 @@ const SearchColleges = () => {
         }
 
         try {
-            const response = await SAVE_College(collegeToSave, token);
+            const { data } = await SAVE_College({
+                variables: { newCollege: { ...collegeToSave }, token }
+            });
 
-            if (!response.ok) {
-                throw new Error('something went wrong!');
+            if (!data.ok) {
+                throw new Error('Something went wrong!');
             }
 
             // if college successfully saves to user's account, save college id to state
