@@ -30,7 +30,7 @@ export const ADD_USER = gql`
   }
 `;
 
-export const SAVE_College = gql`
+export const SAVE_COLLEGE = gql`
   mutation SaveCollege($newCollege: InputCollege!) {
     saveCollege(newCollege: $newCollege) {
       username
@@ -51,7 +51,7 @@ export const SAVE_College = gql`
   }
 `;
 
-export const REMOVE_College = gql`
+export const REMOVE_COLLEGE = gql`
   mutation RemoveCollege($collegeId: ID!) {
     removeCollege(collegeId: $collegeId) {
       _id

@@ -5,7 +5,7 @@ import Auth from '../utils/auth';
 import { saveCollegeIds, getSavedCollegeIds } from '../utils/localStorage';
 import { searchColleges } from '../utils/API';
 import { useMutation } from '@apollo/client';
-import { SAVE_College } from '../utils/mutations';
+import { SAVE_COLLEGE } from '../utils/mutations';
 
 const SearchColleges = () => {
     const [searchedColleges, setSearchedColleges] = useState([]);
@@ -14,7 +14,7 @@ const SearchColleges = () => {
         getSavedCollegeIds()
     );
 
-    const [saveCollege, { error }] = useMutation(SAVE_College);
+    const [saveCollege, { error }] = useMutation(SAVE_COLLEGE);
     useEffect(() => {
         return () => saveCollegeIds(savedCollegeIds);
     });

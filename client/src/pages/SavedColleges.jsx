@@ -5,11 +5,11 @@ import Auth from '../utils/auth';
 import { removeCollegeId } from '../utils/localStorage';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_ME } from '../utils/queries/';
-import { REMOVE_College } from '../utils/mutations';
+import { REMOVE_COLLEGE } from '../utils/mutations';
 
 const SavedColleges = () => {
 	const [getMe, { loading, data }] = useQuery(GET_ME);
-	const [removeCollege, { error }] = useMutation(REMOVE_College);
+	const [removeCollege, { error }] = useMutation(REMOVE_COLLEGE);
 	const userData = data?.me || {};
 
 	// use this to determine if `useEffect()` hook needs to run again
