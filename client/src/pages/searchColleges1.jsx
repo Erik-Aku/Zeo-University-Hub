@@ -59,7 +59,7 @@ const SearchColleges = () => {
         }
 
         try {
-            const { data } = await SAVE_College({
+            const { data } = await saveCollege({
                 variables: { newCollege: { ...collegeToSave }, token }
             });
 
@@ -145,7 +145,6 @@ const SearchColleges = () => {
             </Container>
         </>
     );
-
 };
 
 export default SearchColleges;
