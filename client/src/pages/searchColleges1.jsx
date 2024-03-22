@@ -4,6 +4,7 @@ import 'semantic-ui-css/semantic.min.css';
 import Auth from '../utils/auth';
 import { saveCollege, searchColleges } from '../utils/API';
 import { saveCollegeIds, getSavedCollegeIds } from '../utils/localStorage';
+import { SAVE_College } from '../utils/mutations';
 
 const SearchColleges = () => {
     const [searchedColleges, setSearchedColleges] = useState([]);
@@ -56,7 +57,7 @@ const SearchColleges = () => {
         }
 
         try {
-            const response = await saveCollege(collegeToSave, token);
+            const response = await SAVE_College(collegeToSave, token);
 
             if (!response.ok) {
                 throw new Error('something went wrong!');

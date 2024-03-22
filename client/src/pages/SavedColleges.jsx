@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Container, Card, Button, Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import { getMe, deleteCollege } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeCollegeId } from '../utils/localStorage';
-import { resolvers } from '../../../server/schemas/resolvers';
+import { GET_ME } from '../utils/queries/';
+import { REMOVE_College } from '../utils/mutations';
 
 const SavedColleges = () => {
-	const [userData, setUserData] = useState({});
+	const { loading, data } = useQuery(GET_ME);
+	const [removeBook, { error }] = useMutation(REMOVE_College);
+	const userData = data?.me || {};
 
 	// use this to determine if `useEffect()` hook needs to run again
 	const userDataLength = Object.keys(userData).length;
@@ -38,7 +40,7 @@ const SavedColleges = () => {
 	}, [userDataLength]);
 
 	// create function that accepts the college's mongo _id value as param and deletes the college from the database
-	const handleDeleteCollege = async (collegeId) => {
+	const handleRemoveCollege = async (collegeId) => {
 		const token = Auth.loggedIn() ? Auth.getToken() : null;
 
 		if (!token) {
@@ -46,7 +48,7 @@ const SavedColleges = () => {
 		}
 
 		try {
-			const response = await deleteCollege(collegeId, token);
+			const response = await REMOVE_College(collegeId, token);
 
 			if (!response.ok) {
 				throw new Error('something went wrong!');
@@ -95,7 +97,7 @@ const SavedColleges = () => {
 									<Button
 										basic
 										color='red'
-										onClick={() => handleDeleteCollege(college.collegeId)}
+										onClick={() => handleRemoveCollege(college.collegeId)}
 									>
 										Delete this college!
 									</Button>

@@ -51,7 +51,7 @@ export const SAVE_College = gql`
   }
 `;
 
-export const REMOVE_college = gql`
+export const REMOVE_College = gql`
   mutation RemoveCollege($collegeId: ID!) {
     removeCollege(collegeId: $collegeId) {
       _id
