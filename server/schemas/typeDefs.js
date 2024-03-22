@@ -3,13 +3,13 @@ type User {
     _id: ID!
     username: String
     email: String
-    password:string
-    colleges:[College]
+    password:String
+    savedColleges:[College]
     
 }
 type College {
   collegeId :ID!
-  name: [String]
+  name: String
   tuition: String
   size: Int
   degrees: String
@@ -20,7 +20,7 @@ type College {
 
 input InputCollege{
   collegeId :String!
-  name: [String]
+  name: String
   tuition: String
   size: Int
   degrees: String
@@ -42,7 +42,7 @@ type Query {
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addCollege(newCollege: InputCollege!): User
+    saveCollege(newCollege: InputCollege!): User
     removeCollege(collegeId: ID!): User
   }
 `;
