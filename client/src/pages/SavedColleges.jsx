@@ -4,6 +4,7 @@ import 'semantic-ui-css/semantic.min.css';
 import { getMe, deleteCollege } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeCollegeId } from '../utils/localStorage';
+import { resolvers } from '../../../server/schemas/resolvers';
 
 const SavedColleges = () => {
 	const [userData, setUserData] = useState({});
@@ -20,7 +21,7 @@ const SavedColleges = () => {
 					return false;
 				}
 
-				const response = await getMe(token);
+				const response = await GET_ME(token);
 
 				if (!response.ok) {
 					throw new Error('something went wrong!');
