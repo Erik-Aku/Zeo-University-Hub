@@ -29,3 +29,45 @@ export const ADD_USER = gql`
     }
   }
 `;
+
+export const SAVE_College = gql`
+  mutation SaveCollege($newCollege: InputCollege!) {
+    saveCollege(newCollege: $newCollege) {
+      username
+      email
+      _id
+      password
+      colleges {
+        name
+        tuition
+        size
+        collegeId
+        city
+        state
+        degrees
+        admissions
+      }
+    }
+  }
+`;
+
+export const REMOVE_college = gql`
+  mutation RemoveCollege($collegeId: ID!) {
+    removeCollege(collegeId: $collegeId) {
+      _id
+      username
+      email
+      savedColleges {
+        collegeId
+        name
+        tuition
+        size
+        city
+        degrees
+        state
+        admissions
+      }
+    }
+  }
+`;
+

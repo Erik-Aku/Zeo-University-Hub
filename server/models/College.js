@@ -32,9 +32,9 @@ const collegeSchema = new Schema({
     type: String,
     required: true,
   },
-  admissions:{
-    type:String,
-  }
+  admissions: {
+    type: String,
+  },
 });
 
 module.exports = collegeSchema;
