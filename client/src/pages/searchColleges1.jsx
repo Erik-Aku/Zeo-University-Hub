@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { Container, Form, Button, Grid, Card, Image } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import Auth from '../utils/auth';
-import { saveCollege, searchColleges } from '../utils/API';
 import { saveCollegeIds, getSavedCollegeIds } from '../utils/localStorage';
+import { searchColleges } from '../utils/API';
+import { useMutation } from '@apollo/client';
+import { SAVE_College } from '../utils/mutations';
 
 const SearchColleges = () => {
     const [searchedColleges, setSearchedColleges] = useState([]);
@@ -12,6 +14,7 @@ const SearchColleges = () => {
         getSavedCollegeIds()
     );
 
+    const [saveCollege, { error }] = useMutation(SAVE_College);
     useEffect(() => {
         return () => saveCollegeIds(savedCollegeIds);
     });
@@ -56,10 +59,12 @@ const SearchColleges = () => {
         }
 
         try {
-            const response = await saveCollege(collegeToSave, token);
+            const { data } = await saveCollege({
+                variables: { newCollege: { ...collegeToSave }, token }
+            });
 
-            if (!response.ok) {
-                throw new Error('something went wrong!');
+            if (!data.ok) {
+                throw new Error('Something went wrong!');
             }
 
             // if college successfully saves to user's account, save college id to state
@@ -105,7 +110,7 @@ const SearchColleges = () => {
                 <Grid>
                     {searchedColleges.map((college) => {
                         return (
-                            <Grid.Column key={college.collegeId} width={4}>
+                            <Grid.Column key={college.collegeId} width={8}>
                                 <Card>
                                     {/* {college.image && (
                                         <Image src={college.image} wrapped ui={false} alt={`The cover for ${college.title}`} />
@@ -115,7 +120,7 @@ const SearchColleges = () => {
                                         <Card.Meta>
                                             <span className='date'>{college.city}, {college.state}</span>
                                             <span className='date'>{college.size} students</span>
-                                            <span className='date'>{college.collegeId}</span>
+                                            {/* <span className='date'>{college.collegeId}</span> */}
                                         </Card.Meta>
                                         {/* <Card.Description>{college.description}</Card.Description> */}
                                     </Card.Content>
@@ -140,7 +145,6 @@ const SearchColleges = () => {
             </Container>
         </>
     );
-
 };
 
 export default SearchColleges;
