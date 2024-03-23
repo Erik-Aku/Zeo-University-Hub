@@ -37,7 +37,7 @@ export const SAVE_College = gql`
       email
       _id
       password
-      colleges {
+      savedColleges {
         name
         tuition
         size

@@ -57,12 +57,8 @@ const SearchColleges = () => {
 
         try {
             const { data } = await saveCollege({
-                variables: { newCollege: { ...collegeToSave }, token }
+                variables: { newCollege: { ...collegeToSave }, token}
             });
-
-            if (!data.ok) {
-                throw new Error('Something went wrong!');
-            }
 
             // if college successfully saves to user's account, save college id to state
             setSavedCollegeIds([...savedCollegeIds, collegeToSave.collegeId]);
