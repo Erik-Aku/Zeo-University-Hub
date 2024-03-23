@@ -1,8 +1,8 @@
-const { Schema, model } = require("mongoose");
-const bcrypt = require("bcrypt");
+import { Schema, model } from "mongoose";
+import { hash, compare } from "bcrypt";
 
 // import schema from College.js
-const collegeSchema = require("./College");
+import collegeSchema from "./College";
 
 const userSchema = new Schema(
   {
@@ -36,7 +36,7 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
-    this.password = await bcrypt.hash(this.password, saltRounds);
+    this.password = await hash(this.password, saltRounds);
   }
 
   next();
@@ -44,7 +44,7 @@ userSchema.pre("save", async function (next) {
 
 // custom method to compare and validate password for logging in
 userSchema.methods.isCorrectPassword = async function (password) {
-  return bcrypt.compare(password, this.password);
+  return compare(password, this.password);
 };
 
 // when we query a user, we'll also get another field called `collegeCount` with the number of saved colleges we have
@@ -54,4 +54,4 @@ userSchema.virtual("collegeCount").get(function () {
 
 const User = model("User", userSchema);
 
-module.exports = User;
+export default User;
