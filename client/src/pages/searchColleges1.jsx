@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Container, Form, Button, Grid, Card, Image } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import Auth from '../utils/auth';
@@ -15,9 +15,6 @@ const SearchColleges = () => {
     );
 
     const [saveCollege, { error }] = useMutation(SAVE_College);
-    useEffect(() => {
-        return () => saveCollegeIds(savedCollegeIds);
-    });
 
     // create method to search for Colleges and set state on form submit
     const handleFormSubmit = async (event) => {

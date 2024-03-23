@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Container, Card, Button, Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import Auth from '../utils/auth';
@@ -8,37 +7,9 @@ import { GET_ME } from '../utils/queries/';
 import { REMOVE_College } from '../utils/mutations';
 
 const SavedColleges = () => {
-	const [getMe, { loading, data }] = useQuery(GET_ME);
-	const [removeCollege, { error }] = useMutation(REMOVE_College);
+	const { data, error: queryError } = useQuery(GET_ME);
+	const [removeCollege, { error: mutationError }] = useMutation(REMOVE_College);
 	const userData = data?.me || {};
-
-	// use this to determine if `useEffect()` hook needs to run again
-	const userDataLength = Object.keys(userData).length;
-
-	useEffect(() => {
-		const getUserData = async () => {
-			try {
-				const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-				if (!token) {
-					return false;
-				}
-
-				const response = await getMe(token);
-
-				if (!response.ok) {
-					throw new Error('something went wrong!');
-				}
-
-				const user = await response.json();
-				setUserData(user);
-			} catch (err) {
-				console.error(err);
-			}
-		};
-
-		getUserData();
-	}, [userDataLength]);
 
 	// create function that accepts the college's mongo _id value as param and deletes the college from the database
 	const handleRemoveCollege = async (collegeId) => {
@@ -49,27 +20,14 @@ const SavedColleges = () => {
 		}
 
 		try {
-			const response = await removeCollege({
-				variables: { collegeId, token }
+			await removeCollege({
+				variables: { collegeId }
 			});
-
-			if (!response.ok) {
-				throw new Error('Something went wrong!');
-			}
-
-			const updatedUser = await response.json();
-			setUserData(updatedUser);
-			// upon success, remove college's id from localStorage
 			removeCollegeId(collegeId);
 		} catch (err) {
 			console.error(err);
 		}
 	};
-
-	// if data isn't here yet, say so
-	if (!userDataLength) {
-		return <h2>LOADING...</h2>;
-	}
 
 	return (
 		<>
@@ -80,18 +38,25 @@ const SavedColleges = () => {
 			</div>
 			<Container>
 				<h2 className='pt-5'>
-					{userData.SavedColleges.length
+					{userData?.SavedColleges?.length
 						? `Viewing ${userData.SavedColleges.length} saved ${
-								userData.SavedColleges.length === 1 ? 'college' : 'colleges'
+								userData.SavedColleges.length === 1
+									? 'college'
+									: 'colleges'
 						  }`
 						: 'You have no saved colleges!'}
 				</h2>
 				<Grid>
-					{userData.SavedColleges.map((college) => (
+					{userData?.SavedColleges?.map((college) => (
 						<Grid.Column key={college.collegeId} width={4}>
 							<Card>
 								{college.image && (
-									<Image src={college.image} wrapped ui={false} alt={`The cover for ${college.title}`} />
+									<Image
+										src={college.image}
+										wrapped
+										ui={false}
+										alt={`The cover for ${college.title}`}
+									/>
 								)}
 								<Card.Content>
 									<Card.Header>{college.name}</Card.Header>
@@ -100,7 +65,11 @@ const SavedColleges = () => {
 									<Button
 										basic
 										color='red'
-										onClick={() => handleRemoveCollege(college.collegeId)}
+										onClick={() =>
+											handleRemoveCollege(
+												college.collegeId
+											)
+										}
 									>
 										Delete this college!
 									</Button>
