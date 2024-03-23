@@ -7,7 +7,7 @@ const resolvers = {
       if (context.user) {
         return User.findOne({ _id: context.user._id });
       }
-     // throw AuthenticationError;
+     throw AuthenticationError;
     },
   },
 
@@ -21,7 +21,7 @@ const resolvers = {
         );
         return updatedUser;
       }
-      //throw new AuthenticationError("You must be logged in to save books!");
+      throw new AuthenticationError("You must be logged in to save books!");
     },
     addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
