@@ -1,10 +1,12 @@
 import { generateHashId } from '../utils/helpers';
+import { feedApiKey } from '../../../server/utils/helpers';
 
 export const searchColleges = async (query) => {
     console.log(query);
     if (!query) return [];
 
-    const apiKey = 'TsbiBlKfrodbx9jMgXWNJe2jbDBI1iV1KpUhoHXD';
+    const apiKey = feedApiKey();
+    console.log(apiKey);
     const fields = 'school.name,school.city,school.state,latest.student.size';
     const endpoint = `https://api.data.gov/ed/collegescorecard/v1/schools?api_key=${apiKey}&school.name=${encodeURIComponent(query)}&fields=${fields}&per_page=50`;
     console.log(endpoint);

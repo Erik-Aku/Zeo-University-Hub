@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+
 export const GET_ME = gql`
   query Me {
     me {
@@ -8,13 +9,21 @@ export const GET_ME = gql`
       savedColleges {
         collegeId
         name
-        tuition
-        size
-        degrees
         city
         state
-        admissions
+        size
       }
+    }
+  }
+`;
+
+export const SEARCH_COLLEGES = gql`
+  query searchColleges {
+    searchColleges {
+      name
+      city
+      state
+      size
     }
   }
 `;

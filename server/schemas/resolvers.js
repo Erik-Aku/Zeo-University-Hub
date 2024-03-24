@@ -1,5 +1,6 @@
 const { User, College } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
+const fetch = require('node-fetch');
 
 const resolvers = {
   Query: {
@@ -8,6 +9,29 @@ const resolvers = {
         return User.findOne({ _id: context.user._id });
       }
      // throw AuthenticationError;
+    },
+    searchColleges: async (_, { query }) => {
+      if (!query) return [];
+
+      const apiKey = process.env.API_KEY;
+      const fields = 'school.name,school.city,school.state,latest.student.size';
+      const endpoint = `https://api.data.gov/ed/collegescorecard/v1/schools?api_key=${apiKey}&school.name=${encodeURIComponent(query)}&fields=${fields}&per_page=50`;
+
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const data = await response.json();
+        return data.results.map(college => ({
+          name: college['school.name'],
+          city: college['school.city'],
+          state: college['school.state'],
+          size: college['latest.student.size'],
+        }));
+      } catch (error) {
+        console.error('Error fetching college data:', error);
+        throw new Error('Error fetching college data');
+      }
     },
   },
 
@@ -21,7 +45,6 @@ const resolvers = {
         );
         return updatedUser;
       }
-      //throw new AuthenticationError("You must be logged in to save books!");
     },
     addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
@@ -45,7 +68,6 @@ const resolvers = {
 
       return { token, user };
     },
-
     removeCollege: async (parent, { collegeId }, context) => {
       if (context.user) {
         const updatedUser = User.findByIdAndUpdate(
@@ -55,10 +77,8 @@ const resolvers = {
         );
         return updatedUser;
       }
-      // throw new AuthenticationError("You must be logged in to save books!");
     },
   },
- 
 };
 
 module.exports = resolvers;
