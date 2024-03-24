@@ -32,9 +32,11 @@ const SearchColleges = () => {
         }
 
         try {
-            await saveCollege({
-                variables: { collegeId: collegeToSave.collegeId },
+            const { data } = await saveCollege({
+                variables: { newCollege: { ...collegeToSave }, token}
             });
+      
+            // if college successfully saves to user's account, save college id to state
             setSavedCollegeIds([...savedCollegeIds, collegeToSave.collegeId]);
         } catch (err) {
             console.error(err);
@@ -94,7 +96,7 @@ const SearchColleges = () => {
                                             disabled={savedCollegeIds.some(savedCollegeId => savedCollegeId === college.collegeId)}
                                             onClick={() => handleSaveCollege(college.collegeId)}>
                                             {savedCollegeIds.some(savedCollegeId => savedCollegeId === college.collegeId)
-                                                ? 'This college has already been saved!'
+                                                ? 'This college has already been saved!' 
                                                 : 'Save this college!'}
                                         </Button>
                                     </Card.Content>
