@@ -3,8 +3,8 @@ type User {
     _id: ID!
     username: String
     email: String
-    password:String
-    savedColleges:[College]
+    password: String
+    savedColleges: [College]
     
 }
 type College {
@@ -16,7 +16,7 @@ type College {
 }
 
 input InputCollege{
-    collegeId :String!
+    collegeId: String!
     name: String
     city: String
     state:String

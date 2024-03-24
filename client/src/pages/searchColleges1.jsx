@@ -1,25 +1,25 @@
 import { useState } from 'react';
-import { Container, Form, Button, Grid, Card, Image } from 'semantic-ui-react';
+import { Container, Form, Button, Grid, Card } from 'semantic-ui-react';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import 'semantic-ui-css/semantic.min.css';
+
 import Auth from '../utils/auth';
 import { saveCollegeIds, getSavedCollegeIds } from '../utils/localStorage';
-import { useQuery, useMutation } from '@apollo/client';
-import { SEARCH_COLLEGES } from '../utils/queries'; // Make sure this query is defined in your queries file
+import { SEARCH_COLLEGES } from '../utils/queries';
 import { SAVE_COLLEGE } from '../utils/mutations';
 
 const SearchColleges = () => {
     const [searchInput, setSearchInput] = useState('');
     const [savedCollegeIds, setSavedCollegeIds] = useState(getSavedCollegeIds());
-    const [saveCollege, { error }] = useMutation(SAVE_COLLEGE);
-
-    const { loading, data } = useQuery(SEARCH_COLLEGES);
-
+    const [saveCollege, { error: saveError }] = useMutation(SAVE_COLLEGE);
+    const [executeSearch, { loading, data }] = useLazyQuery(SEARCH_COLLEGES);
+    
     const searchedColleges = data?.searchColleges || [];
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        if (!searchInput) {
-            return false;
+        if (searchInput) {
+            executeSearch({ variables: { query: searchInput } });
         }
     };
 
@@ -70,9 +70,10 @@ const SearchColleges = () => {
 
             <Container>
                 <h2 className='pt-5'>
-                    {searchedColleges.length
-                        ? `Viewing ${searchedColleges.length} results:`
-                        : 'Search for a college to begin'}
+                    {loading ? 'Loading...' : 
+                        (searchedColleges.length
+                            ? `Viewing ${searchedColleges.length} results:`
+                            : 'Search for a college to begin')}
                 </h2>
                 <Grid>
                     {searchedColleges.map((college) => (

@@ -21,10 +21,11 @@ export const ADD_USER = gql`
 				username
 				email
 				savedColleges {
-					name
 					collegeId
+					name
 					city
 					state
+					size
 				}
 			}
 		}
@@ -40,11 +41,11 @@ export const SAVE_COLLEGE = gql`
 			_id
 			password
 			colleges {
-				name
-				size
 				collegeId
+				name
 				city
 				state
+				size
 			}
 		}
 	}
