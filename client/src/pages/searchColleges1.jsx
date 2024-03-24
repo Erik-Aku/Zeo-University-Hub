@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Container, Form, Button, Grid, Card, Image } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import Auth from '../utils/auth';
@@ -15,9 +15,6 @@ const SearchColleges = () => {
     );
 
     const [saveCollege, { error }] = useMutation(SAVE_College);
-    useEffect(() => {
-        return () => saveCollegeIds(savedCollegeIds);
-    });
 
     // create method to search for Colleges and set state on form submit
     const handleFormSubmit = async (event) => {
@@ -60,13 +57,9 @@ const SearchColleges = () => {
 
         try {
             const { data } = await saveCollege({
-                variables: { newCollege: { ...collegeToSave }, token }
+                variables: { newCollege: { ...collegeToSave }, token}
             });
-
-            if (!data.ok) {
-                throw new Error('Something went wrong!');
-            }
-
+      
             // if college successfully saves to user's account, save college id to state
             setSavedCollegeIds([...savedCollegeIds, collegeToSave.collegeId]);
         } catch (err) {
@@ -132,7 +125,7 @@ const SearchColleges = () => {
                                                 disabled={savedCollegeIds?.some((savedCollegeId) => savedCollegeId === college.collegeId)}
                                                 onClick={() => handleSaveCollege(college.collegeId)}>
                                                 {savedCollegeIds?.some((savedCollegeId) => savedCollegeId === college.collegeId)
-                                                    ? 'This college has already been saved!'
+                                                    ? 'This college has already been saved!' 
                                                     : 'Save this college!'}
                                             </Button>
                                         </Card.Content>

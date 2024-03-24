@@ -29,8 +29,7 @@ const collegeSchema = new Schema({
     required: true,
   },
   degrees: {
-    type: String,
-    required: true,
+    type: String
   },
   admissions: {
     type: String,
