@@ -1,57 +1,63 @@
-body {
-  font-family: 'Rubik', sans-serif;
-}
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Rubik Mono One', sans-serif;
+.custom-body {
+  background-color: #FAF4ED;
+  color: #575279;
+  font-family: "Raleway", sans-serif;
+  height: 100%;
+  line-height: 1.5;
 }
-
-.small {
-  font-weight: 300;
-  font-style: italic;
-}
-
-/* Roopa */
-.header-zeo {
-  margin: 10px;
-  background-color: dodgerblue;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
-.nav-bar {
-  display: flex;
-}
-
-.nav-bar a {
+h1, h2, h3, h4, h5, h6 {
+  color: #575279;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
   text-decoration: none;
+}
+h1 {
+  font-size: 3.25rem;
+  font-weight: 700;
+  margin-top: 0;
+}
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+h3 {
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+
+/* Style for the form container */
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 100px;
   padding: 20px;
-}
-/*Transforming the image*/
-#profilepic {
-  border-radius: 50%;
-}
-#AboutMe {
-  display: flex;
-  flex-wrap: wrap;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-/* Sets the AboutMe section  width to 70% of body width */
-
-#AboutMe p {
-  flex: 70%;
-  font-family: Arial, Helvetica, sans-serif;
-  padding-left: 50px;
-  border-left: solid var(--color);
+/* Style for form inputs */
+.form-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
-#Work {
-  display: flex;
-  flex-wrap: wrap;
+
+/* Style for the submit button */
+.form-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Style for error message */
+.error-message {
+  color: red;
 }
