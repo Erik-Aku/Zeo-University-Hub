@@ -1,7 +1,14 @@
 const { User, College } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
-const { generateHashId } = require('../utils/helpers');
 const fetch = require('node-fetch');
+
+let generateHashId;
+
+(async () => {
+  const helpersModule = await import('../../client/src/utils/helpers.js');
+  generateHashId = helpersModule.generateHashId;
+})();
+
 
 const resolvers = {
 	Query: {
@@ -14,11 +21,8 @@ const resolvers = {
 			if (!query) return [];
 
 			const apiKey = process.env.API_KEY;
-			const fields =
-				'school.name,school.city,school.state,latest.student.size';
-			const endpoint = `https://api.data.gov/ed/collegescorecard/v1/schools?api_key=${apiKey}&school.name=${encodeURIComponent(
-				query
-			)}&fields=${fields}&per_page=50`;
+			const fields = 'school.name,school.city,school.state,latest.student.size';
+			const endpoint = `https://api.data.gov/ed/collegescorecard/v1/schools?api_key=${apiKey}&school.name=${encodeURIComponent(query)}&fields=${fields}&per_page=50`;
 
 			try {
 				const response = await fetch(endpoint);
@@ -29,17 +33,15 @@ const resolvers = {
 				}
 
 				const data = await response.json();
-				return data.results.map((college) => ({
-					id: generateHashId(
-						college['school.name'],
-						college['school.city'],
-						college['school.state']
-					),
+				const collegeData = data.results.map((college) => ({
+					id: generateHashId(college['school.name'], college['school.city'], college['school.state']),
 					name: college['school.name'],
 					city: college['school.city'],
 					state: college['school.state'],
 					size: college['latest.student.size']
 				}));
+                console.log('Checkpoint 5', collegeData);
+                return collegeData;
 			} catch (error) {
 				console.error('Error fetching college data:', error);
 				throw new Error('Error fetching college data');

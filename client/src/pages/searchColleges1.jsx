@@ -1,43 +1,60 @@
 import { useState } from 'react';
 import { Container, Form, Button, Grid, Card } from 'semantic-ui-react';
-import { useLazyQuery, useMutation } from '@apollo/client';
 import 'semantic-ui-css/semantic.min.css';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 import Auth from '../utils/auth';
 import { saveCollegeIds, getSavedCollegeIds } from '../utils/localStorage';
 import { SEARCH_COLLEGES } from '../utils/queries';
 import { SAVE_COLLEGE } from '../utils/mutations';
+import { generateHashId } from '../utils/helpers'; // Import the unique ID generation function
 
 const SearchColleges = () => {
     const [searchInput, setSearchInput] = useState('');
+    const [searchedColleges, setSearchedColleges] = useState([]); // State to hold processed colleges
     const [savedCollegeIds, setSavedCollegeIds] = useState(getSavedCollegeIds());
-    const [saveCollege, { error: saveError }] = useMutation(SAVE_COLLEGE);
-    const [executeSearch, { loading, data }] = useLazyQuery(SEARCH_COLLEGES);
-    
-    const searchedColleges = data?.searchColleges || [];
+    const [saveCollege] = useMutation(SAVE_COLLEGE);
+    const [executeSearch, { loading }] = useLazyQuery(SEARCH_COLLEGES, {
+        onCompleted: data => {
+            // Process the data to include unique IDs
+            const processedColleges = data.searchColleges.map(college => ({
+                ...college,
+                collegeId: generateHashId(college.name, college.city, college.state) // Generate a unique ID
+            }));
+            setSearchedColleges(processedColleges); // Update the state with processed data
+        }
+    });
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        if (searchInput) {
-            executeSearch({ variables: { query: searchInput } });
-        }
+        if (!searchInput) return;
+        executeSearch({ variables: { query: searchInput } });
     };
 
-    const handleSaveCollege = async (collegeId) => {
-        const collegeToSave = searchedColleges.find(college => college.collegeId === collegeId);
-        const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-        if (!token) {
+    const handleSaveCollege = async (college) => {
+        console.log('Checkpoint 6', college);
+        if (!Auth.loggedIn()) {
+            console.log("User not logged in.");
             return false;
         }
 
+        const collegeData = {
+            collegeId: college.collegeId,
+            name: college.name,
+            city: college.city,
+            state: college.state,
+            size: college.size,
+        };
+
+        console.log('Checkpoint 7', collegeData);
+
         try {
             await saveCollege({
-                variables: { collegeId: collegeToSave.collegeId },
+                variables: { newCollege: collegeData }
             });
-            setSavedCollegeIds([...savedCollegeIds, collegeToSave.collegeId]);
+            setSavedCollegeIds([...savedCollegeIds, college.collegeId]);
         } catch (err) {
-            console.error(err);
+            console.error("Error saving college:", err);
         }
     };
 
@@ -68,12 +85,49 @@ const SearchColleges = () => {
                 </Container>
             </div>
 
+            {/* <Container>
+                <h2 className='pt-5'>
+                    {searchedColleges.length
+                        ? `Viewing ${searchedColleges.length} results:`
+                        : 'Search for a college to begin'}
+                </h2>
+                <Grid>
+                    {searchedColleges.map((college) => {
+                        return (
+                            <Grid.Column key={college.collegeId} width={8}>
+                                <Card>
+
+                                    <Card.Content>
+                                        <Card.Header>{college.name}</Card.Header>
+                                        <Card.Meta>
+                                            <span className='date'>{college.city}, {college.state}</span>
+                                            <span className='date'>{college.size} students</span>
+                                            <span className='date'>{college.collegeId}</span>
+                                        </Card.Meta>
+                                    </Card.Content>
+                                    {Auth.loggedIn() && (
+                                        <Card.Content extra>
+                                            <Button
+                                                fluid
+                                                color='blue'
+                                                disabled={savedCollegeIds?.some((savedCollegeId) => savedCollegeId === college.collegeId)}
+                                                onClick={() => handleSaveCollege(college.collegeId)}>
+                                                {savedCollegeIds?.some((savedCollegeId) => savedCollegeId === college.collegeId)
+                                                    ? 'This college has already been saved!'
+                                                    : 'Save this college!'}
+                                            </Button>
+                                        </Card.Content>
+                                    )}
+                                </Card>
+                            </Grid.Column>
+                        );
+                    })}
+                </Grid>
+            </Container> */}
+
             <Container>
                 <h2 className='pt-5'>
-                    {loading ? 'Loading...' : 
-                        (searchedColleges.length
-                            ? `Viewing ${searchedColleges.length} results:`
-                            : 'Search for a college to begin')}
+                    {loading ? 'Loading...' : `${searchedColleges.length ? `Viewing ${searchedColleges.length} results:` : 'Search for a college to begin'}`}
                 </h2>
                 <Grid>
                     {searchedColleges.map((college) => (
@@ -91,11 +145,9 @@ const SearchColleges = () => {
                                         <Button
                                             fluid
                                             color='blue'
-                                            disabled={savedCollegeIds.some(savedCollegeId => savedCollegeId === college.collegeId)}
-                                            onClick={() => handleSaveCollege(college.collegeId)}>
-                                            {savedCollegeIds.some(savedCollegeId => savedCollegeId === college.collegeId)
-                                                ? 'This college has already been saved!'
-                                                : 'Save this college!'}
+                                            disabled={savedCollegeIds.includes(college.collegeId)}
+                                            onClick={() => handleSaveCollege(college)}>
+                                            {savedCollegeIds.includes(college.collegeId) ? 'This college has already been saved!' : 'Save this college!'}
                                         </Button>
                                     </Card.Content>
                                 )}

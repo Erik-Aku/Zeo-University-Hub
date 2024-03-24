@@ -7,8 +7,9 @@ type User {
     savedColleges: [College]
     
 }
+
 type College {
-    collegeId :ID!
+    collegeId: ID!
     name: String
     city: String
     state: String
@@ -19,7 +20,7 @@ input InputCollege{
     collegeId: String!
     name: String
     city: String
-    state:String
+    state: String
     size: Int
 }
 
