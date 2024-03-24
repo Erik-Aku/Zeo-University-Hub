@@ -40,7 +40,7 @@ export const SAVE_COLLEGE = gql`
 			email
 			_id
 			password
-			colleges {
+			savedColleges {
 				collegeId
 				name
 				city

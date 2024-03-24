@@ -31,30 +31,36 @@ const SearchColleges = () => {
         executeSearch({ variables: { query: searchInput } });
     };
 
-    const handleSaveCollege = async (college) => {
-        console.log('Checkpoint 6', college);
-        if (!Auth.loggedIn()) {
-            console.log("User not logged in.");
+    const handleSaveCollege = async (collegeId) => {
+        console.log(getSavedCollegeIds);
+        const token = Auth.loggedIn() ? Auth.getToken() : null;
+        if (!token) {
+            alert("You must be logged in to save colleges.");
             return false;
         }
-
-        const collegeData = {
-            collegeId: college.collegeId,
-            name: college.name,
-            city: college.city,
-            state: college.state,
-            size: college.size,
-        };
-
-        console.log('Checkpoint 7', collegeData);
-
+    
+        const collegeToSave = searchedColleges.find(college => college.collegeId === collegeId);
+        if (!collegeToSave) {
+            console.error("College to save not found.");
+            return;
+        }
+    
+        if (savedCollegeIds.includes(collegeId)) {
+            alert("This college has already been saved!");
+            return;
+        }
+    
         try {
+            const { name, city, state, size, collegeId: id } = collegeToSave;
             await saveCollege({
-                variables: { newCollege: collegeData }
+                variables: { newCollege: { name, city, state, size, collegeId: id }, token },
             });
-            setSavedCollegeIds([...savedCollegeIds, college.collegeId]);
+    
+            setSavedCollegeIds(prevIds => [...new Set([...prevIds, id])]);
+            alert("College saved successfully!");
         } catch (err) {
             console.error("Error saving college:", err);
+            alert("An error occurred while saving the college.");
         }
     };
 
@@ -146,9 +152,11 @@ const SearchColleges = () => {
                                             fluid
                                             color='blue'
                                             disabled={savedCollegeIds.includes(college.collegeId)}
-                                            onClick={() => handleSaveCollege(college)}>
+                                            onClick={() => handleSaveCollege(college.collegeId)}> {/* Pass only the collegeId */}
                                             {savedCollegeIds.includes(college.collegeId) ? 'This college has already been saved!' : 'Save this college!'}
                                         </Button>
+
+
                                     </Card.Content>
                                 )}
                             </Card>

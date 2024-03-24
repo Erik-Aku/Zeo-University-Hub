@@ -1,35 +1,41 @@
 export const getSavedCollegeIds = () => {
-	const savedCollegeIds = localStorage.getItem('saved_colleges ')
-		? JSON.parse(localStorage.getItem('saved_colleges '))
-		: [];
+    const savedCollegeItem = localStorage.getItem('saved_colleges');
+    console.log("Retrieved saved_colleges from localStorage:", savedCollegeItem);
 
-	return savedCollegeIds;
+    if (!savedCollegeItem) {
+        return [];
+    }
+
+    try {
+        return JSON.parse(savedCollegeItem);
+    } catch (error) {
+        console.error("Error parsing saved colleges from localStorage:", error);
+        return [];
+    }
 };
 
 export const saveCollegeIds = (collegeIdArr) => {
-	if (collegeIdArr.length) {
-		localStorage.setItem('saved_colleges ', JSON.stringify(collegeIdArr));
-	} else {
-		localStorage.removeItem('saved_colleges ');
-	}
+    if (collegeIdArr.length) {
+        localStorage.setItem('saved_colleges', JSON.stringify(collegeIdArr));
+    } else {
+        localStorage.removeItem('saved_colleges');
+    }
 };
 
 export const removeCollegeId = (collegeId) => {
-	const savedCollegeIds = localStorage.getItem('saved_colleges ')
-		? JSON.parse(localStorage.getItem('saved_colleges '))
-		: null;
+    const savedCollegeIds = localStorage.getItem('saved_colleges')
+        ? JSON.parse(localStorage.getItem('saved_colleges'))
+        : null;
 
-	if (!savedCollegeIds) {
-		return false;
-	}
+    if (!savedCollegeIds) {
+        return false;
+    }
 
-	const updatedSavedCollegeIds = savedCollegeIds?.filter(
-		(savedCollegeId) => savedCollegeId !== collegeId
-	);
-	localStorage.setItem(
-		'saved_colleges ',
-		JSON.stringify(updatedSavedCollegeIds)
-	);
+    const updatedSavedCollegeIds = savedCollegeIds.filter(
+        (savedCollegeId) => savedCollegeId !== collegeId
+    );
+    localStorage.setItem('saved_colleges', JSON.stringify(updatedSavedCollegeIds));
 
-	return true;
+    return true;
 };
+

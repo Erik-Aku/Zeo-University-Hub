@@ -34,7 +34,7 @@ const resolvers = {
 
 				const data = await response.json();
 				const collegeData = data.results.map((college) => ({
-					id: generateHashId(college['school.name'], college['school.city'], college['school.state']),
+					// id: generateHashId(college['school.name'], college['school.city'], college['school.state']),
 					name: college['school.name'],
 					city: college['school.city'],
 					state: college['school.state'],
