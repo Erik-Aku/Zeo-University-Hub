@@ -1,49 +1,67 @@
 import { Link } from "react-router-dom";
 import Auth from "../utils/auth";
-// import { Navbar, Nav, Container} from 'react-bootstrap';
-
+import { Container, Menu, Image, Header } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 const AppNavbar = () => {
   return (
-    <>
-      <header className="header-zeo">
-        <img
-          id="profilepic"
-          src="./Assets/images/profile pic.png"
-          alt="profilePicture"
-          width="10%"
-          height="10%"
-        />
-
-        <h1>Zeo University Hub</h1>
-        <nav className='nav-bar'>
-          <Link to="/">
-            <h3>
-              <b>Home</b>
-            </h3>
-          </Link>
+    <Menu inverted>
+      <Container
+        style={{
+          width: "100%",
+          paddingLeft: "20px",
+          paddingRight: "20px",
+        }}
+      >
+        <Menu.Item>
+          <Image
+            src="/Zeo-Logo.png"
+            alt="profilePicture"
+            style={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "center",
+              width: "100px",
+            }}
+          />
+        </Menu.Item>
+        <Menu.Item
+          header
+          style={{
+            flexGrow: 1,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Header as="h1" inverted style={{ margin: "0 auto" }}>
+            Zeo University Hub
+          </Header>
+        </Menu.Item>
+        <Menu.Menu position="right">
+          <Menu.Item as={Link} to="/" name="home">
+            Home
+          </Menu.Item>
           {Auth.loggedIn() ? (
             <>
-              <Link to="/saved">Saved Colleges</Link>
-              <Link onClick={Auth.logout}>Logout</Link>
+              <Menu.Item as={Link} to="/saved" name="savedColleges">
+                Saved Colleges
+              </Menu.Item>
+              <Menu.Item onClick={Auth.logout} name="logout">
+                Logout
+              </Menu.Item>
             </>
           ) : (
             <>
-              <Link to="/login">
-                <h3>
-                  <b>Login</b>
-                </h3>
-              </Link>
-              <Link to="/signup">
-                <h3>
-                  <b>Signup</b>
-                </h3>
-              </Link>
+              <Menu.Item as={Link} to="/login" name="login">
+                Login
+              </Menu.Item>
+              <Menu.Item as={Link} to="/signup" name="signup">
+                Signup
+              </Menu.Item>
             </>
           )}
-        </nav>
-      </header>
-    </>
+        </Menu.Menu>
+      </Container>
+    </Menu>
   );
 };
-
 export default AppNavbar;
