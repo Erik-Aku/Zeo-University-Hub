@@ -38,4 +38,3 @@ export const removeCollegeId = (collegeId) => {
 
     return true;
 };
-

@@ -16,12 +16,12 @@ const AppNavbar = () => {
 				<Menu.Item>
 					<Image
 						src='/Zeo-Logo.png'
-						alt='profilePicture'
+						alt='siteLogo'
 						style={{
 							flexGrow: 1,
 							display: 'flex',
 							justifyContent: 'center',
-							width: '100px'
+							width: '125px'
 						}}
 					/>
 				</Menu.Item>
