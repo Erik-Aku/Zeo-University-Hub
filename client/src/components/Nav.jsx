@@ -72,5 +72,5 @@ const AppNavbar = () => {
 		</Menu>
 	);
 };
-
 export default AppNavbar;
+
