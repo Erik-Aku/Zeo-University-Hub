@@ -1,82 +1,79 @@
 import { useState, useEffect } from 'react';
 import { Container, Form, Button, Grid, Card } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import { useLazyQuery, useMutation } from '@apollo/client';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 
 import Auth from '../utils/auth';
 import { saveCollegeIds, getSavedCollegeIds } from '../utils/localStorage';
-import { SEARCH_COLLEGES } from '../utils/queries';
+import { GET_ME, SEARCH_COLLEGES } from '../utils/queries';
 import { SAVE_COLLEGE } from '../utils/mutations';
 import { generateHashId } from '../utils/helpers';
 
 const SearchColleges = () => {
-	const [searchInput, setSearchInput] = useState('');
-	const [searchedColleges, setSearchedColleges] = useState([]);
-	const [savedCollegeIds, setSavedCollegeIds] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
+    const [searchedColleges, setSearchedColleges] = useState([]);
+    const [savedCollegeIds, setSavedCollegeIds] = useState([]);
 
-	const [saveCollege] = useMutation(SAVE_COLLEGE);
-	const [executeSearch, { loading }] = useLazyQuery(SEARCH_COLLEGES, {
-		onCompleted: (data) => {
-			const processedColleges = data.searchColleges.map((college) => ({
-				...college,
-				collegeId: generateHashId(
-					college.name,
-					college.city,
-					college.state
-				)
-			}));
-			setSearchedColleges(processedColleges);
-		}
-	});
+    const [saveCollege] = useMutation(SAVE_COLLEGE);
+    const [executeSearch, { loading }] = useLazyQuery(SEARCH_COLLEGES, {
+        onCompleted: data => {
+            const processedColleges = data.searchColleges.map(college => ({
+                ...college,
+                collegeId: generateHashId(college.name, college.city, college.state)
+            }));
+            setSearchedColleges(processedColleges);
+        }
+    });
 
-	useEffect(() => {
-		setSavedCollegeIds(getSavedCollegeIds());
-	}, []);
+    const { data: userData } = useQuery(GET_ME, {
+        fetchPolicy: "network-only",
+    });
 
-	const handleFormSubmit = async (event) => {
-		event.preventDefault();
-		if (!searchInput) return;
-		executeSearch({ variables: { query: searchInput } });
-	};
+    useEffect(() => {
+        const userSavedCollegeIds = userData?.me?.savedColleges?.map(college => college.collegeId) || [];
+        setSavedCollegeIds(userSavedCollegeIds);
+        saveCollegeIds(userSavedCollegeIds); // This line ensures localStorage is also updated.
+    }, [userData]); // Add userData as a dependency
 
-	const handleSaveCollege = async (collegeId) => {
-		const token = Auth.loggedIn() ? Auth.getToken() : null;
-		if (!token) {
-			alert('You must be logged in to save colleges.');
-			return false;
-		}
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        if (!searchInput) return;
+        executeSearch({ variables: { query: searchInput } });
+    };
 
-		const collegeToSave = searchedColleges.find(
-			(college) => college.collegeId === collegeId
-		);
-		if (!collegeToSave) {
-			console.error('College to save not found.');
-			return;
-		}
+    const handleSaveCollege = async (collegeId) => {
+        const token = Auth.loggedIn() ? Auth.getToken() : null;
+        if (!token) {
+            alert("You must be logged in to save colleges.");
+            return false;
+        }
 
-		if (savedCollegeIds.includes(collegeId)) {
-			alert('This college has already been saved!');
-			return;
-		}
+        const collegeToSave = searchedColleges.find(college => college.collegeId === collegeId);
+        if (!collegeToSave) {
+            console.error("College to save not found.");
+            return;
+        }
 
-		try {
-			const { name, city, state, size, collegeId: id } = collegeToSave;
-			await saveCollege({
-				variables: {
-					newCollege: { name, city, state, size, collegeId: id },
-					token
-				}
-			});
+        if (savedCollegeIds.includes(collegeId)) {
+            alert("This college has already been saved!");
+            return;
+        }
 
-			const newSavedCollegeIds = [...savedCollegeIds, id];
-			setSavedCollegeIds(newSavedCollegeIds);
-			saveCollegeIds(newSavedCollegeIds);
-			alert('College saved successfully!');
-		} catch (err) {
-			console.error('Error saving college:', err);
-			alert('An error occurred while saving the college.');
-		}
-	};
+        try {
+            const { name, city, state, size, collegeId: id } = collegeToSave;
+            await saveCollege({
+                variables: { newCollege: { name, city, state, size, collegeId: id }, token },
+            });
+
+            const newSavedCollegeIds = [...savedCollegeIds, id];
+            setSavedCollegeIds(newSavedCollegeIds);
+            saveCollegeIds(newSavedCollegeIds);
+            alert("College saved successfully!");
+        } catch (err) {
+            console.error("Error saving college:", err);
+            alert("An error occurred while saving the college.");
+        }
+    };
 
 	return (
 		<>

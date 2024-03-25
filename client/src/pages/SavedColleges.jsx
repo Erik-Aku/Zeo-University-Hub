@@ -13,11 +13,6 @@ const SavedColleges = () => {
 
     // create function that accepts the college's mongo _id value as param and deletes the college from the database
     const handleRemoveCollege = async (collegeId) => {
-        //   const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-        //   if (!token) {
-        //     return false;
-        //   }
         if (!Auth.loggedIn()) {
             console.log("You must be logged in to remove colleges.");
             return false;

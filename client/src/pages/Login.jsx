@@ -43,15 +43,6 @@ const LoginForm = () => {
     });
   };
 
-  const handleLogout = () => {
-    // Clear all items from localStorage
-    localStorage.clear();
-    
-    // Add any other logout logic here
-    Auth.logout();
-  };
-  
-
   return (
     <>
       <form className='form-container' onSubmit={handleFormSubmit}>
