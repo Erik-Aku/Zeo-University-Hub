@@ -1,63 +1,65 @@
-
 .custom-body {
-  background-color: #FAF4ED;
-  color: #575279;
-  font-family: "Raleway", sans-serif;
-  height: 100%;
-  line-height: 1.5;
-}
-h1, h2, h3, h4, h5, h6 {
-  color: #575279;
-  font-family: "Raleway", sans-serif;
-  font-weight: 700;
-  text-decoration: none;
-}
-h1 {
-  font-size: 3.25rem;
-  font-weight: 700;
-  margin-top: 0;
-}
-h2 {
-  font-size: 2rem;
-  font-weight: 600;
-}
-h3 {
-  font-size: 1.75rem;
-  font-weight: 500;
+    background-color: #faf4ed;
+    color: #575279;
+    font-family: "Raleway", sans-serif;
+    height: 100%;
+    line-height: 1.5;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    color: #575279;
+    font-family: "Raleway", sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 3.25rem;
+    font-weight: 700;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.75rem;
+    font-weight: 500;
+}
 
 /* Style for the form container */
 .form-container {
-  max-width: 400px;
-  margin: 0 auto;
-  margin-top: 100px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Style for form inputs */
-.form-input {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Style for the submit button */
-.form-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Style for error message */
-.error-message {
-  color: red;
-}
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Style for form inputs */
+  .form-input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Style for the submit button */
+  .form-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style for error message */
+  .error-message {
+    color: red;
+  }
