@@ -31,8 +31,6 @@ const SavedColleges = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>An error occurred: {error.message}</div>;
 
-    console.log(userData);
-
     return (
         <>
             <div className="text-light bg-dark p-5"></div>
