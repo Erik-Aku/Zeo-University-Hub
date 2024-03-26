@@ -1,6 +1,5 @@
 export const getSavedCollegeIds = () => {
     const savedCollegeItem = localStorage.getItem('saved_colleges');
-    console.log("Retrieved saved_colleges from localStorage:", savedCollegeItem);
 
     if (!savedCollegeItem) {
         return [];

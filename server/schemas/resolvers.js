@@ -40,7 +40,6 @@ const resolvers = {
 					state: college['school.state'],
 					size: college['latest.student.size']
 				}));
-                console.log('Checkpoint 5', collegeData);
                 return collegeData;
 			} catch (error) {
 				console.error('Error fetching college data:', error);

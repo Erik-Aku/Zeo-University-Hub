@@ -44,7 +44,6 @@ const SearchColleges = () => {
     const handleSaveCollege = async (collegeId) => {
         const token = Auth.loggedIn() ? Auth.getToken() : null;
         if (!token) {
-            alert("You must be logged in to save colleges.");
             return false;
         }
 
@@ -55,7 +54,6 @@ const SearchColleges = () => {
         }
 
         if (savedCollegeIds.includes(collegeId)) {
-            alert("This college has already been saved!");
             return;
         }
 
@@ -68,7 +66,6 @@ const SearchColleges = () => {
             const newSavedCollegeIds = [...savedCollegeIds, id];
             setSavedCollegeIds(newSavedCollegeIds);
             saveCollegeIds(newSavedCollegeIds);
-            alert("College saved successfully!");
         } catch (err) {
             console.error("Error saving college:", err);
             alert("An error occurred while saving the college.");
