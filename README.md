@@ -25,14 +25,25 @@ Deployed Site: https://zeo-university-hub.onrender.com/
 
 ## Application Screenshots
 
+![zeo-university-hub onrender com_ (2)](https://github.com/Erik-Aku/Zeo-University-Hub/assets/92487526/a1685c21-33f4-4331-af57-57731ac0e3bc)
+
+
 ![localhost_3000_ (2)](https://github.com/Erik-Aku/Zeo-University-Hub/assets/92487526/6e7b83b1-7982-4dc3-b4eb-b6ad23211bd4)
 
 
-![localhost_3000_ (2)](https://github.com/Erik-Aku/Zeo-University-Hub/assets/92487526/02af3686-f4c1-4e0f-be06-0b737abf9a50)
+![zeo-university-hub onrender com_ (4)](https://github.com/Erik-Aku/Zeo-University-Hub/assets/92487526/f8f89279-174f-4e48-82da-3b0f6a341ef7)
 
 
-![localhost_3000_ (2)](https://github.com/Erik-Aku/Zeo-University-Hub/assets/92487526/545c63ad-a5c4-479d-8c6c-2ac91d59bfac)
+![zeo-university-hub onrender com_ (5)](https://github.com/Erik-Aku/Zeo-University-Hub/assets/92487526/fefbb2aa-633b-4c8c-8def-45c45d837864)
 
 
-![localhost_3000_ (2)](https://github.com/Erik-Aku/Zeo-University-Hub/assets/92487526/8e6b93de-a835-47c0-ba1b-3188d4982b59)
+![zeo-university-hub onrender com_ (6)](https://github.com/Erik-Aku/Zeo-University-Hub/assets/92487526/61145766-81c0-4a1e-80ef-862245825b2f)
+
+
+
+
+
+
+
+
 
