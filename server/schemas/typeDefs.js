@@ -1,11 +1,12 @@
+// Define GraphQL schema for the server
+
 const typeDefs = `
 type User {
     _id: ID!
     username: String
     email: String
     password: String
-    savedColleges: [College]
-    
+    savedColleges: [College]  
 }
 
 type College {
@@ -16,7 +17,7 @@ type College {
     size: Int
 }
 
-input InputCollege{
+input InputCollege {
     collegeId: String!
     name: String
     city: String
@@ -30,8 +31,8 @@ type Auth {
 }
 
 type Query {
-      me: User
-      searchColleges(query: String!): [College]
+    me: User
+    searchColleges(query: String!): [College]
 }
 
 type Mutation {

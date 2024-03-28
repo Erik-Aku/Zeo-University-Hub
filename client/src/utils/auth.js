@@ -1,43 +1,41 @@
 import decode from 'jwt-decode';
 
+// AuthService class to handle authentication operations
 class AuthService {
-  getProfile() {
-    return decode(this.getToken());
-  }
-
-  loggedIn() {
-    const token = this.getToken();
-    // If there is a token and it's not expired, return `true`
-    return token && !this.isTokenExpired(token) ? true : false;
-  }
-
-  isTokenExpired(token) {
-    // Decode the token to get its expiration time that was set by the server
-    const decoded = decode(token);
-    // If the expiration time is less than the current time (in seconds), the token is expired and we return `true`
-    if (decoded.exp < Date.now() / 1000) {
-      localStorage.removeItem('id_token');
-      return true;
+    // Decodes and returns the user profile from the token
+    getProfile() {
+        return decode(this.getToken());
     }
-    // If token hasn't passed its expiration time, return `false`
-    return false;
-  }
 
-  getToken() {
-    return localStorage.getItem('id_token');
-  }
+    // Checks if the user is logged in by verifying the token's existence and expiration
+    loggedIn() {
+        const token = this.getToken();
+        return token && !this.isTokenExpired(token) ? true : false;
+    }
 
-  login(idToken) {
-    localStorage.setItem('id_token', idToken);
-    window.location.assign('/');
-  }
+    // Checks if the token has expired
+    isTokenExpired(token) {
+        const decoded = decode(token);
+        return decoded.exp < Date.now() / 1000;
+    }
 
-  logout() {
-    localStorage.removeItem('id_token');
-    window.location.reload();
-    localStorage.clear();
-    window.location.assign('/');
-  }
+    // Retrieves the token from localStorage
+    getToken() {
+        return localStorage.getItem('id_token');
+    }
+
+    // Sets the token in localStorage and redirects to the home page
+    login(idToken) {
+        localStorage.setItem('id_token', idToken);
+        window.location.assign('/');
+    }
+
+    // Clears the token and user-related data from localStorage on logout
+    logout() {
+        localStorage.removeItem('id_token');
+        localStorage.clear();
+        window.location.assign('/');
+    }
 }
 
 export default new AuthService();
