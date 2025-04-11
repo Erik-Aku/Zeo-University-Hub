@@ -4,7 +4,7 @@
 You’re a student. You’re stressed about what colleges you want to attend. Or maybe you’re their excessively high-strung parent and want to look at colleges to force your kid to attend. In any case, you need a site to look up colleges and college info.
 Behold, Zeo University Hub.
 
-Deployed Site: https://zeo-university-hub.onrender.com/
+Deployed Site: [https://zeo-university-hub.onrender.com/](https://zeo-university-hub-dpp8.onrender.com/)
 
 ## Installation
 
